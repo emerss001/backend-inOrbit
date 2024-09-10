@@ -6,3 +6,11 @@ export const goals = pgTable("goals", {
     desiredWeeklyFrequency: integer("desired_weenkly_frequency").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
+
+export const goalCompletions = pgTable("goals_completions", {
+    id: text("id").primaryKey(),
+    goalId: text("goal_id")
+        .references(() => goals.id)
+        .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
