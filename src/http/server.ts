@@ -3,6 +3,7 @@ import z from "zod";
 import { createGoal } from "../features/create-goals";
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
 import { getWeekPedingsGoals } from "../features/get-week-pedings-goals";
+import { createGoalCompletion } from "../features/create-goal-completion";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -31,6 +32,24 @@ app.post(
         await createGoal({
             title,
             desiredWeeklyFrequency,
+        });
+    }
+);
+
+app.post(
+    "/goals-completions",
+    {
+        schema: {
+            body: z.object({
+                goalId: z.string(),
+            }),
+        },
+    },
+    async (request) => {
+        const { goalId } = request.body;
+
+        await createGoalCompletion({
+            goalId,
         });
     }
 );
