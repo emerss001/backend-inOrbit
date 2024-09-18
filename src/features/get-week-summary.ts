@@ -1,4 +1,4 @@
-import { count, gte, lte, and, sql, eq } from "drizzle-orm";
+import { gte, lte, and, sql, eq, count } from "drizzle-orm";
 import { db } from "../db";
 import { goalCompletions, goals } from "../db/schema";
 import dayjs from "dayjs";
@@ -35,5 +35,28 @@ export async function getWeekSummary() {
             .innerJoin(goals, eq(goals.id, goalCompletions.goalId))
             .where(and(gte(goalCompletions.createdAt, firstDayOfWeek), lte(goalCompletions.createdAt, lastDayOfWeek)))
     );
-    return { sumary: "teste" };
+
+    // Agrupar dados pela data
+    const goalsCompletedByWeekDay = db.$with("goals_completed_by_week_day").as(
+        db
+            .select({
+                completedAtDate: goalsCompletedInWeek.completedAt,
+                completions: sql/*sql*/ `
+            JSON_AGG(
+                JSON_BUILD_OBJECT(
+                    'id', ${goalsCompletedInWeek.id},
+                    'title', ${goalsCompletedInWeek.title},
+                    'completedAt', ${goalsCompletedInWeek.completedAt}
+                )
+            )`.as("completions"),
+            })
+            .from(goalsCompletedInWeek)
+            .groupBy(goalsCompletedInWeek.completedAt)
+    );
+
+    const result = await db
+        .with(goalsCreatedUpToWeek, goalsCompletedInWeek, goalsCompletedByWeekDay)
+        .select()
+        .from(goalsCompletedByWeekDay);
+    return { sumary: result };
 }
