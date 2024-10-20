@@ -67,5 +67,5 @@ export async function getWeekSummary() {
             )`,
         })
         .from(goalsCompletedByWeekDay);
-    return { sumary: result };
+    return { sumary: result[0] };
 }
