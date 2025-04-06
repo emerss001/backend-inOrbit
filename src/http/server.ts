@@ -6,6 +6,7 @@ import { getPendingGoals } from "./routes/get-pending-goals";
 import { getWeekSummaryRoute } from "./routes/get-week-summary";
 import fastifyCors from "@fastify/cors";
 import { healthheck } from "./routes/healthCheck";
+import { undoCompletionGoalRoute } from "./routes/undo-completion-goal";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -21,6 +22,7 @@ app.register(createGoalRoute);
 app.register(createCompletionRoute);
 app.register(getPendingGoals);
 app.register(getWeekSummaryRoute);
+app.register(undoCompletionGoalRoute);
 
 // Rota de healthcheck
 app.register(healthheck);

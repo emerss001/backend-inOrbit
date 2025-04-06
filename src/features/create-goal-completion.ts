@@ -48,10 +48,12 @@ export async function createGoalCompletion({ goalId }: createGoalCompletionReque
         throw new Error("Meta já completada nessa semana!");
     }
 
+    const createdAt = dayjs().second(dayjs().second()).millisecond(0).toDate();
     const insertResult = await db
         .insert(goalCompletions)
         .values({
             goalId,
+            createdAt,
         })
         .returning();
 
