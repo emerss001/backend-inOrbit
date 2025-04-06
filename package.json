@@ -9,7 +9,7 @@
         "dev": "tsx watch --env-file .env src/http/server.ts",
         "seed": "tsx --env-file .env src/db/seed.ts",
         "start": "node --enable-source-maps dist/http/server.js",
-        "build": "tsx drizzle-kit generate",
+        "build": "npx drizzle-kit generate",
         "heroku-postbuild": "npm run build"
     },
     "keywords": [],
@@ -30,6 +30,8 @@
         "fastify": "^5.0.0",
         "fastify-type-provider-zod": "^4.0.2",
         "postgres": "^3.4.4",
-        "zod": "^3.23.8"
+        "zod": "^3.23.8",
+        "drizzle-kit": "^0.24.2",
+        "tsx": "^4.19.0"
     }
 }
