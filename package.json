@@ -9,7 +9,7 @@
         "dev": "tsx watch --env-file .env src/http/server.ts",
         "seed": "tsx --env-file .env src/db/seed.ts",
         "start": "node --enable-source-maps dist/http/server.js",
-        "build": "npx drizzle-kit generate",
+        "build": "npx drizzle-kit generate && npx tsc",
         "heroku-postbuild": "npm run build"
     },
     "keywords": [],
