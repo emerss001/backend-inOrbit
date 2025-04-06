@@ -72,11 +72,15 @@ export async function getWeekSummary() {
             total: sql/*sql*/ `(SELECT SUM(${goalsCreatedUpToWeek.desiredWeeklyFrequency}) FROM ${goalsCreatedUpToWeek})`.mapWith(
                 Number
             ),
-            goalsPerDay: sql/*sql*/ <GoalsPerDay>`
-            JSON_OBJECT_AGG(
-                ${goalsCompletedByWeekDay.completedAtDate},
-                ${goalsCompletedByWeekDay.completions}
-            )`,
+            goalsPerDay: sql<GoalsPerDay>`
+  COALESCE(
+    JSON_OBJECT_AGG(
+      ${goalsCompletedByWeekDay.completedAtDate},
+      ${goalsCompletedByWeekDay.completions}
+    ),
+    '{}'::json
+  )
+`,
         })
         .from(goalsCompletedByWeekDay);
     return { sumary: result[0] };
