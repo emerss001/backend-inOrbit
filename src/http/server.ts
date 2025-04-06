@@ -22,7 +22,7 @@ app.register(getPendingGoals);
 app.register(getWeekSummaryRoute);
 
 app.listen({
-    port: 4545,
+    port: Number(process.env.PORT) || 4545,
 }).then(() => {
     console.log("HTTP Server Running");
 });
