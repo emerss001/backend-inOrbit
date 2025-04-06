@@ -5,6 +5,7 @@ import { createCompletionRoute } from "./routes/create-completion";
 import { getPendingGoals } from "./routes/get-pending-goals";
 import { getWeekSummaryRoute } from "./routes/get-week-summary";
 import fastifyCors from "@fastify/cors";
+import { healthheck } from "./routes/healthCheck";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -21,8 +22,16 @@ app.register(createCompletionRoute);
 app.register(getPendingGoals);
 app.register(getWeekSummaryRoute);
 
+// Rota de healthcheck
+app.register(healthheck);
+
 app.listen({
     port: Number(process.env.PORT) || 4545,
-}).then(() => {
-    console.log("HTTP Server Running");
-});
+    host: "0.0.0.0",
+})
+    .then(() => {
+        console.log("HTTP Server Running", process.env.PORT);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
